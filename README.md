@@ -1,6 +1,6 @@
 # gr-pwr
 A power control supporting project for original gr-lsa system
 
-working on a automatic power control system to help gr-lsa to 
+The main target is to design an automatic gain control system to help gr-lsa 
 
-react to more general radio networks. 
+react to more the presence of higher priorities radios fast and efficiently.

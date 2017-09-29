@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# MAC osx
+.DS_Store
+
+# Copy and auto gen from software
+*.swp
+log/*.log
+build/
+examples/*
+*.dat
+*.out
+tag
+*.tag
+*.orig
+.vscode

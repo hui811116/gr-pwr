@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    pwr_pwr_tagger.xml DESTINATION share/gnuradio/grc/blocks
+    pwr_pwr_tagger.xml
+    pwr_calc_pwr_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

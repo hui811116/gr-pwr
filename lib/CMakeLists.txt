@@ -27,6 +27,7 @@ link_directories(${Boost_LIBRARY_DIRS} ${VOLK_LIBRARY_DIRS})
 
 list(APPEND pwr_sources
     pwr_tagger.cc
+    calc_pwr_cc_impl.cc
 )
 
 set(pwr_sources "${pwr_sources}" PARENT_SCOPE)

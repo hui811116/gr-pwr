@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<block>
+  <name>Calc Power</name>
+  <key>pwr_calc_pwr_cc</key>
+  <category>[pwr]</category>
+  <import>import pwr</import>
+  <make>pwr.calc_pwr_cc($aclen,$tagname)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>Accumulate Length</name>
+    <key>aclen</key>
+    <value>256</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Target Tag</name>
+    <key>tagname</key>
+    <value>"cfo_est"</value>
+    <type>string</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+  <source>
+    <name>msg_out</name>
+    <type>message</type>
+  </source>
+</block>

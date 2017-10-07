@@ -22,5 +22,6 @@
 ########################################################################
 install(FILES
     api.h
-    pwr_tagger.h DESTINATION include/pwr
+    pwr_tagger.h
+    calc_pwr_cc.h DESTINATION include/pwr
 )

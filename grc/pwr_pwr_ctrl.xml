@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<block>
+  <name>Power Control</name>
+  <key>pwr_pwr_ctrl</key>
+  <category>[pwr]</category>
+  <import>import pwr</import>
+  <make>pwr.pwr_ctrl()</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <!--
+  <param>
+    <name>...</name>
+    <key>...</key>
+    <type>...</type>
+  </param>
+  -->
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>pwr_in</name>
+    <type>message</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>msg_out</name>
+    <type>message</type>
+  </source>
+  <source>
+    <name>pwr_out</name>
+    <type>message</type>
+  </source>
+</block>

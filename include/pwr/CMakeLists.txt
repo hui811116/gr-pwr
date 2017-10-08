@@ -23,5 +23,6 @@
 install(FILES
     api.h
     pwr_tagger.h
-    calc_pwr_cc.h DESTINATION include/pwr
+    calc_pwr_cc.h
+    pwr_ctrl.h DESTINATION include/pwr
 )

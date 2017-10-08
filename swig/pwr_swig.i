@@ -10,6 +10,7 @@
 %{
 #include "pwr/pwr_tagger.h"
 #include "pwr/calc_pwr_cc.h"
+#include "pwr/pwr_ctrl.h"
 %}
 
 
@@ -17,3 +18,5 @@
 GR_SWIG_BLOCK_MAGIC2(pwr, pwr_tagger);
 %include "pwr/calc_pwr_cc.h"
 GR_SWIG_BLOCK_MAGIC2(pwr, calc_pwr_cc);
+%include "pwr/pwr_ctrl.h"
+GR_SWIG_BLOBK_MAGIC2(pwr, pwr_ctrl);

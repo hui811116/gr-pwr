@@ -25,5 +25,6 @@ install(FILES
     pwr_tagger.h
     calc_pwr_cc.h
     pwr_ctrl.h
-    pwr_sender.h DESTINATION include/pwr
+    pwr_sender.h
+    autocorr_ts_tagger_cc.h DESTINATION include/pwr
 )

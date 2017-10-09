@@ -30,6 +30,7 @@ list(APPEND pwr_sources
     calc_pwr_cc_impl.cc
     pwr_ctrl.cc
     pwr_sender.cc
+    autocorr_ts_tagger_cc_impl.cc
 )
 
 set(pwr_sources "${pwr_sources}" PARENT_SCOPE)

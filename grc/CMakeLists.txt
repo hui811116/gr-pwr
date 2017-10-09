@@ -21,5 +21,6 @@ install(FILES
     pwr_pwr_tagger.xml
     pwr_calc_pwr_cc.xml
     pwr_pwr_ctrl.xml
-    pwr_pwr_sender.xml DESTINATION share/gnuradio/grc/blocks
+    pwr_pwr_sender.xml
+    pwr_autocorr_ts_tagger_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

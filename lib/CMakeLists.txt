@@ -29,6 +29,7 @@ list(APPEND pwr_sources
     pwr_tagger.cc
     calc_pwr_cc_impl.cc
     pwr_ctrl.cc
+    pwr_sender.cc
 )
 
 set(pwr_sources "${pwr_sources}" PARENT_SCOPE)

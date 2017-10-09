@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<block>
+  <name>File Sender</name>
+  <key>pwr_pwr_sender</key>
+  <category>[pwr]</category>
+  <import>import pwr</import>
+  <make>pwr.pwr_sender($filename,$timeout)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>CSV file</name>
+    <key>filename</key>
+    <value></value>
+    <type>file_open</type>
+  </param>
+  <param>
+    <name>Timeout(ms)</name>
+    <key>timeout</key>
+    <value>1000</value>
+    <type>float</type>
+  </param>
+
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>feb_in</name>
+    <type>message</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>pld_out</name>
+    <type>message</type>
+  </source>
+</block>

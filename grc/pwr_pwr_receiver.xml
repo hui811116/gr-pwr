@@ -1,43 +1,34 @@
 <?xml version="1.0"?>
 <block>
-  <name>Power Control</name>
-  <key>pwr_pwr_ctrl</key>
+  <name>File Receiver</name>
+  <key>pwr_pwr_receiver</key>
   <category>[pwr]</category>
   <import>import pwr</import>
-  <make>pwr.pwr_ctrl($target)</make>
-  <callback>set_target($target)</callback>
+  <make>pwr.pwr_receiver($expect_pkt)</make>
+  <callback>set_expect_pkt($expect_pkt)</callback>
+  <callback>set_reset($reset)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-  
   <param>
-    <name>Target Level</name>
-    <key>target</key>
-    <value>1</value>
+    <name>Expected Packets</name>
+    <key>expect_pkt</key>
     <type>int</type>
-    <option>
-      <name>Low</name>
-      <key>0</key>
-    </option>
-    <option>
-      <name>Medium</name>
-      <key>1</key>
-    </option>
-    <option>
-      <name>High</name>
-      <key>2</key>
-    </option>
   </param>
-  
+  <param>
+    <name>Reset</name>
+    <key>reset</key>
+  </param>
+
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type
        * vlen
        * optional (set to 1 for optional inputs) -->
   <sink>
-    <name>pwr_in</name>
+    <name>phy_in</name>
     <type>message</type>
   </sink>
 
@@ -47,11 +38,11 @@
        * vlen
        * optional (set to 1 for optional inputs) -->
   <source>
-    <name>msg_out</name>
+    <name>ack_out</name>
     <type>message</type>
   </source>
   <source>
-    <name>pwr_out</name>
+    <name>pld_out</name>
     <type>message</type>
   </source>
 </block>

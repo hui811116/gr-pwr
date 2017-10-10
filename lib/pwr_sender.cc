@@ -68,28 +68,28 @@ namespace gr {
     		// diff.total_milliseconds()/1000.0;
     		return block::stop();
     	}
+        void feb_in(pmt::pmt_t msg)
+        {
+            pmt::pmt_t k = pmt::car(msg);
+            pmt::pmt_t v = pmt::cdr(msg);
+            assert(pmt::is_blob(v));
+            // assume crc is already done in PHY layer
+            size_t io(0);
+            const uint8_t* uvec = pmt::u8vector_elements(v,io);
+            if(io==4){
+                uint16_t base1, base2;
+                base1 = uvec[0]<<8;
+                base1|= uvec[1];
+                base2 = uvec[2]<<8;
+                base2|= uvec[3];
+                if(base1==base2 && base1 == d_seqno){
+                    d_acked = true;
+                    d_ack_received.notify_one();
+                    // pwr sends next message once previous transmission acked
+                }
+            }
+        }
     private:
-    	void feb_in(pmt::pmt_t msg)
-    	{
-    		pmt::pmt_t k = pmt::car(msg);
-    		pmt::pmt_t v = pmt::cdr(msg);
-    		assert(pmt::is_blob(v));
-    		// assume crc is already done in PHY layer
-    		size_t io(0);
-    		const uint8_t* uvec = pmt::u8vector_elements(v,io);
-    		if(io==4){
-    			uint16_t base1, base2;
-    			base1 = uvec[0]<<8;
-    			base1|= uvec[1];
-    			base2 = uvec[2]<<8;
-    			base2|= uvec[3];
-    			if(base1==base2 && base1 == d_seqno){
-    				d_acked = true;
-    				d_ack_received.notify_one();
-    				// pwr sends next message once previous transmission acked
-    			}
-    		}
-    	}
     	void run()
     	{
     		int retry = 0;

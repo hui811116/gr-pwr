@@ -1,41 +1,34 @@
 <?xml version="1.0"?>
 <block>
-  <name>Power Control</name>
-  <key>pwr_pwr_ctrl</key>
+  <name>Power Tag Prefixer</name>
+  <key>pwr_pwr_prefixer</key>
   <category>[pwr]</category>
   <import>import pwr</import>
-  <make>pwr.pwr_ctrl($target)</make>
-  <callback>set_target($target)</callback>
+  <make>pwr.pwr_prefixer($lowest_db,$step_db)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-  
   <param>
-    <name>Target Level</name>
-    <key>target</key>
-    <value>1</value>
-    <type>int</type>
-    <option>
-      <name>Low</name>
-      <key>0</key>
-    </option>
-    <option>
-      <name>Medium</name>
-      <key>1</key>
-    </option>
-    <option>
-      <name>High</name>
-      <key>2</key>
-    </option>
+    <name>Lowest(dB)</name>
+    <key>lowest_db</key>
+    <type>float</type>
   </param>
-  
+  <param>
+    <name>Step(dB)</name>
+    <key>step_db</key>
+    <type>float</type>
+  </param>
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type
        * vlen
        * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>phy_in</name>
+    <type>message</type>
+  </sink>
   <sink>
     <name>pwr_in</name>
     <type>message</type>
@@ -47,11 +40,7 @@
        * vlen
        * optional (set to 1 for optional inputs) -->
   <source>
-    <name>msg_out</name>
-    <type>message</type>
-  </source>
-  <source>
-    <name>pwr_out</name>
+    <name>phy_out</name>
     <type>message</type>
   </source>
 </block>

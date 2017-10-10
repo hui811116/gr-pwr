@@ -19,8 +19,8 @@
  */
 
 
-#ifndef INCLUDED_PWR_PWR_CTRL_H
-#define INCLUDED_PWR_PWR_CTRL_H
+#ifndef INCLUDED_PWR_PWR_PREFIXER_H
+#define INCLUDED_PWR_PWR_PREFIXER_H
 
 #include <pwr/api.h>
 #include <gnuradio/block.h>
@@ -32,18 +32,15 @@ namespace gr {
      * \brief <+description+>
      *
      */
-    class PWR_API pwr_ctrl : virtual public block
+    class PWR_API pwr_prefixer : virtual public block
     {
     public:
-      typedef boost::shared_ptr<pwr_ctrl> sptr;
-      static sptr make(int target);
-
-      virtual void set_target(int target) =0;
-      virtual int target() const =0;
+      typedef boost::shared_ptr<pwr_prefixer> sptr;
+      static sptr make(float lowest_db,float db_step);
     };
 
   } // namespace pwr
 } // namespace gr
 
-#endif /* INCLUDED_PWR_PWR_CTRL_H */
+#endif /* INCLUDED_PWR_PWR_PREFIXER_H */
 

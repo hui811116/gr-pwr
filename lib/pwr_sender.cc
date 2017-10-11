@@ -50,7 +50,10 @@ namespace gr {
     		}
     		d_seqno = 0;
     	}
-    	~pwr_sender_impl(){}
+    	~pwr_sender_impl()
+        {
+            
+        }
     	bool start()
     	{
     		d_finished = false;

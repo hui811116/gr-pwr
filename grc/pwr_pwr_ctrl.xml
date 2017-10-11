@@ -4,7 +4,7 @@
   <key>pwr_pwr_ctrl</key>
   <category>[pwr]</category>
   <import>import pwr</import>
-  <make>pwr.pwr_ctrl($target)</make>
+  <make>pwr.pwr_ctrl($target_val)</make>
   <callback>set_target($target)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -14,7 +14,7 @@
   
   <param>
     <name>Target Level</name>
-    <key>target</key>
+    <key>target_val</key>
     <value>1</value>
     <type>int</type>
     <option>

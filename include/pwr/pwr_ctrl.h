@@ -36,7 +36,7 @@ namespace gr {
     {
     public:
       typedef boost::shared_ptr<pwr_ctrl> sptr;
-      static sptr make(int target);
+      static sptr make(int target_val);
 
       virtual void set_target(int target) =0;
       virtual int target() const =0;

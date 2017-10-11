@@ -31,13 +31,7 @@ namespace gr {
   namespace pwr {
     #define UPDATE_PERIOD_MS 1000
     #define DEFAULT_PWR_LEVEL 4
-  	enum PWR_CTRL_LEVEL{
-  		LOWEST=0x11,LV01=0x22,LV02=0x33,LV03=0x44,
-  		MEDIUM=0x55,LV11=0x66,LV12=0x77,LV13=0x88,
-  		HIGH=0x99,LV21=0xAA,LV22=0xBB,LV23=0xCC,
-        INIT=0x00
-  		// residual levels for construction
-  	};
+  	
     static unsigned char d_pwr_map[12] = {
         0x11,0x22,0x33,0x44,
         0x55,0x66,0x77,0x88,
@@ -52,21 +46,30 @@ namespace gr {
     class pwr_ctrl_impl : public pwr_ctrl
     {
     public:
-    	pwr_ctrl_impl(int target) : block("pwr_ctrl",
+    	pwr_ctrl_impl(int target_val) : block("pwr_ctrl",
     		gr::io_signature::make(0,0,0),
     		gr::io_signature::make(0,0,0)),
     		d_out_port(pmt::mp("msg_out")),
     		d_pwr_out(pmt::mp("pwr_out")),
     		d_pwr_in(pmt::mp("pwr_in"))
     	{
-    		message_port_register_in(d_pwr_in);
+    		
     		message_port_register_out(d_out_port);
     		message_port_register_out(d_pwr_out);
-    		set_msg_handler(d_pwr_in,boost::bind(&pwr_ctrl_impl::pwr_in,this,_1));
+            message_port_register_in(d_pwr_in);
+    		set_msg_handler(d_pwr_in,boost::bind(&pwr_ctrl_impl::pwrmsg_in,this,_1));
             // -1 for initial state
-            set_target(target);
+            set_target(target_val);
     	}
     	~pwr_ctrl_impl(){}
+        enum PWR_CTRL_LEVEL{
+            LOWEST=0x11,LV01=0x22,LV02=0x33,LV03=0x44,
+            MEDIUM=0x55,LV11=0x66,LV12=0x77,LV13=0x88,
+            HIGH=0x99,LV21=0xAA,LV22=0xBB,LV23=0xCC,
+            INIT=0x00
+            // residual levels for construction
+        };
+        
         bool start()
         {
             d_finished = false;
@@ -82,7 +85,7 @@ namespace gr {
             d_thread->join();
             return block::stop();
         }
-    	void pwr_in(pmt::pmt_t msg)
+    	void pwrmsg_in(pmt::pmt_t msg)
         {
             gr::thread::scoped_lock guard(d_mutex);
             pmt::pmt_t k = pmt::car(msg);
@@ -286,9 +289,9 @@ namespace gr {
     };
 
     pwr_ctrl::sptr
-    pwr_ctrl::make(int target)
+    pwr_ctrl::make(int target_val)
     {
-    	return gnuradio::get_initial_sptr(new pwr_ctrl_impl(target));
+    	return gnuradio::get_initial_sptr(new pwr_ctrl_impl(target_val));
     }
   } /* namespace pwr */
 } /* namespace gr */

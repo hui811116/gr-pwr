@@ -20,6 +20,7 @@
   <param>
     <name>Reset</name>
     <key>reset</key>
+    <type>int</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:

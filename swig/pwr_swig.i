@@ -23,9 +23,9 @@ GR_SWIG_BLOCK_MAGIC2(pwr, pwr_tagger);
 %include "pwr/calc_pwr_cc.h"
 GR_SWIG_BLOCK_MAGIC2(pwr, calc_pwr_cc);
 %include "pwr/pwr_ctrl.h"
-GR_SWIG_BLOBK_MAGIC2(pwr, pwr_ctrl);
+GR_SWIG_BLOCK_MAGIC2(pwr, pwr_ctrl);
 %include "pwr/pwr_sender.h"
-GR_SWIG_BLOBK_MAGIC2(pwr, pwr_sender);
+GR_SWIG_BLOCK_MAGIC2(pwr, pwr_sender);
 %include "pwr/autocorr_ts_tagger_cc.h"
 GR_SWIG_BLOCK_MAGIC2(pwr, autocorr_ts_tagger_cc);
 %include "pwr/pwr_receiver.h"

@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>"name=NicB210"</value>
+      <value>"name=MyB210"</value>
     </param>
   </block>
   <block>
@@ -186,7 +186,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>4e6</value>
+      <value>2e6</value>
     </param>
   </block>
   <block>
@@ -1030,7 +1030,7 @@
     </param>
     <param>
       <key>filename</key>
-      <value>/home/nic-hui/project/data/data_l200_b20.csv</value>
+      <value>/home/niclab/project/data/data_b20_l200.csv</value>
     </param>
     <param>
       <key>comment</key>
@@ -1187,7 +1187,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>0.1</value>
+      <value>0.5</value>
     </param>
     <param>
       <key>ant10</key>

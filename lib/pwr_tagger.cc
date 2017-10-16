@@ -80,7 +80,7 @@ namespace gr {
     			if(d_update){
     				d_update = false;
     				d_curr_pwr = d_next_pwr;
-    				message_port_pub(d_out_port,pmt::cons(d_gtag,pmt::from_double(d_curr_pwr)));
+    				//message_port_pub(d_out_port,pmt::cons(d_gtag,pmt::from_double(d_curr_pwr)));
     				dout<<"Update power tag for power = "<<d_curr_pwr<<" dB"
     				<<", system time:"<<diff.total_seconds()<<std::endl;
     			}

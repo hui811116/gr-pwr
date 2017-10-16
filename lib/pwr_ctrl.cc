@@ -94,7 +94,7 @@ namespace gr {
             size_t io(0);
             const uint8_t* uvec = pmt::u8vector_elements(v,io);
             if(io>1){
-                memcpy(d_buf,uvec,sizeof(char) * (io-1));
+                memcpy(d_buf,uvec+1,sizeof(char) * (io-1));
                 pmt::pmt_t blob = pmt::make_blob(d_buf,io-1);
                 message_port_pub(d_out_port,pmt::cons(pmt::PMT_NIL,blob));
             }

@@ -115,7 +115,7 @@ namespace gr {
     				// successfully acked
                     dout << "successfully acked a packet"<<std::endl;
     				retry =0;
-    				d_seqno = (d_seqno==0xffff) ? 0 : d_seqno+1;
+    				d_seqno = (d_seqno==0xffff || d_seqno == d_data_src.size()-1) ? 0 : d_seqno+1;
     			}else if(retry == d_retry_lim){
     				// reach retry limit, sleep 10 seconds
                     dout << "Timeout and exceed retry limits, wait for 10 seconds and resume" <<std::endl;

@@ -100,6 +100,7 @@ namespace gr {
         }
         if(d_do_report){
           d_do_report = false;
+          std::cout<<"<Calc Power>output calculated pwr db"<<d_pwr_db<<std::endl;
           message_port_pub(d_out_port,pmt::cons(pmt::PMT_NIL, pmt::from_float(d_pwr_db)));
         }
       }

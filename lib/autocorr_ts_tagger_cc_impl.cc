@@ -111,7 +111,7 @@ namespace gr {
         d_gap_cnt++;
       }
 
-      consume_each (nin);
+      consume_each (count);
       return nout;
     }
 

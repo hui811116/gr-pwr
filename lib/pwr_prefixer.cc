@@ -29,6 +29,8 @@
 
 namespace gr {
   namespace pwr {
+    #define d_debug 1
+    #define dout d_debug && std::cout
   	static pmt::pmt_t d_pwr_tag = pmt::intern("pwr_tag");
   	enum PWR_LEVEL{
   		INIT = 0x00,

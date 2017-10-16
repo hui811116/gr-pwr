@@ -28,6 +28,8 @@
 
 namespace gr {
   namespace pwr {
+    #define d_debug 0
+    #define dout d_debug && std::cout
   	#define SEQLEN 4
     class pwr_receiver_impl : public pwr_receiver
     {
@@ -91,6 +93,7 @@ namespace gr {
     		gr::thread::scoped_lock guard(d_mutex);
     		if(!d_reset_request && reset){
     			// need to reset
+                dout<<"<Pwr RX>Reset function is called"<<std::endl;
     			d_reset_request = true;
     			d_reset_received.notify_one();
     		}
@@ -140,6 +143,7 @@ namespace gr {
     			if(d_finished){
     				return;
     			}else if(d_reset_request){
+                    dout<<"<PWR RX>In thread function, reset system time and packet counts"<<std::endl;
     				d_sys_time = boost::posix_time::microsec_clock::local_time();
     				d_pkt_cnt=0;
     				d_reset_request = false;

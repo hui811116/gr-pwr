@@ -102,7 +102,7 @@ namespace gr {
               add_item_tag(0,nwrite+count,d_auto_key,pmt::from_float(cfo),d_this_block);
               d_gap_cnt=0;
             }
-            d_auto_cnt==0;
+            d_auto_cnt=0;
           }
         }else{
           d_auto_cnt=0;

@@ -32,6 +32,8 @@ namespace gr {
   namespace pwr {
   	#define MAXLEN 123
   	#define SEQNUM 4
+    #define d_debug 0
+    #define dout d_debug && std::cout
     class pwr_sender_impl : public pwr_sender
     {
     public:
@@ -49,6 +51,7 @@ namespace gr {
     			throw std::runtime_error("Invalid source file, please check and restart...");
     		}
     		d_seqno = 0;
+            d_timeout = timeout;
     	}
     	~pwr_sender_impl()
         {
@@ -99,6 +102,7 @@ namespace gr {
     		while(true){
     			d_acked = false;
     			generate_msg();
+                dout<<"sending packet with seqno = "<<d_seqno<<std::endl;
     			message_port_pub(d_pld_out,d_cur_msg);
     			retry++;
     			gr::thread::scoped_lock lock(d_mutex);
@@ -109,10 +113,12 @@ namespace gr {
     			}
     			if(d_acked){
     				// successfully acked
+                    dout << "successfully acked a packet"<<std::endl;
     				retry =0;
     				d_seqno = (d_seqno==0xffff) ? 0 : d_seqno+1;
     			}else if(retry == d_retry_lim){
     				// reach retry limit, sleep 10 seconds
+                    dout << "Timeout and exceed retry limits, wait for 10 seconds and resume" <<std::endl;
     				boost::this_thread::sleep(boost::posix_time::seconds(10.0));
     				if(d_finished){
     					return;

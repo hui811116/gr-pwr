@@ -28,9 +28,12 @@ namespace gr {
     		message_port_register_in(d_in_port);
     		message_port_register_out(d_out_port);
     		set_msg_handler(d_in_port,boost::bind(&pwr_tagger_impl::msg_in,this,_1));
-    		if(period <= 0.0){
+    		if(period < 0.0){
     			d_period = 1.0;
-    		}else{
+    		}else if(period ==0){
+                // supported and termed "immediate mode"
+                d_period = 0;
+            }else{
     			d_period = (double)period;
     		}
     	}
@@ -71,7 +74,14 @@ namespace gr {
     	void run()
     	{
     		while(!d_finished){
-    			boost::this_thread::sleep(boost::posix_time::milliseconds(d_period));
+                if(d_period>0){
+                    boost::this_thread::sleep(boost::posix_time::milliseconds(d_period));    
+                }else{
+                    // imm mode
+                    gr::thread::scoped_lock lock(d_mutex);
+                    d_imm_update.wait(lock);
+                    lock.unlock();
+                }
     			if(d_finished){
     				return;
     			}
@@ -91,6 +101,7 @@ namespace gr {
     	boost::shared_ptr<gr::thread::thread> d_thread;
     	boost::posix_time::ptime d_sys_time;
     	gr::thread::mutex d_mutex;
+        gr::thread::condition_variable d_imm_update;
     	float d_period;
     	double d_curr_pwr;
     	double d_next_pwr;

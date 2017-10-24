@@ -67,6 +67,9 @@ namespace gr {
     				// can add some power checking function to avoid usrp gain overflow
     				d_next_pwr = get_power;
     				d_update = true;
+                    if(d_period ==0){
+                        d_imm_update.notify_one();
+                    }
     			}
     		}
     	}

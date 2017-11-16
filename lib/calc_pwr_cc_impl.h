@@ -29,13 +29,16 @@ namespace gr {
     class calc_pwr_cc_impl : public calc_pwr_cc
     {
      private:
-      double d_acc_eng;
-      int d_acc_len;
+      gr_complex d_acc_eng;
+      //int d_acc_len;
       int d_acc_cnt;
-      bool d_state;
+      //bool d_state;
       bool d_do_report;
       bool d_finished;
       float d_pwr_db;
+      float d_period;
+      gr_complex* d_eg_buf;
+      const size_t d_cap;
 
       gr::thread::mutex d_mutex;
       const pmt::pmt_t d_out_port;
@@ -46,7 +49,7 @@ namespace gr {
       void run();
 
      public:
-      calc_pwr_cc_impl(int aclen,const std::string& tagname);
+      calc_pwr_cc_impl(float period);
       ~calc_pwr_cc_impl();
 
       // Where all the action really happens

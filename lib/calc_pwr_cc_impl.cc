@@ -26,31 +26,38 @@
 #include "calc_pwr_cc_impl.h"
 #include <cstring>
 #include <cmath>
+#include <volk/volk.h>
 
 namespace gr {
   namespace pwr {
     #define d_debug true
     #define dout d_debug && std::cout
-    static float d_update_period = 1000; // 1.0 milliseconds
     calc_pwr_cc::sptr
-    calc_pwr_cc::make(int aclen,const std::string& tagname)
+    calc_pwr_cc::make(float period)
     {
       return gnuradio::get_initial_sptr
-        (new calc_pwr_cc_impl(aclen, tagname));
+        (new calc_pwr_cc_impl(period));
     }
 
     /*
      * The private constructor
      */
-    calc_pwr_cc_impl::calc_pwr_cc_impl(int aclen, const std::string& tagname)
+    calc_pwr_cc_impl::calc_pwr_cc_impl(float period)
       : gr::sync_block("calc_pwr_cc",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(1, 1, sizeof(gr_complex))),
               d_out_port(pmt::mp("msg_out")),
-              d_target_tag(pmt::intern(tagname))
+              d_cap(8192*32)
     {
       message_port_register_out(d_out_port);
-      set_calc_len(aclen);
+      //set_calc_len(aclen);
+      if(period<0){
+        throw std::invalid_argument("Period (ms) should be positive number");
+      }
+      d_period = period;
+      set_max_noutput_items(d_cap);
+      d_eg_buf = (gr_complex*) volk_malloc(sizeof(gr_complex)*d_cap,volk_get_alignment());
+      d_acc_eng = gr_complex(0,0);
     }
 
     /*
@@ -58,8 +65,9 @@ namespace gr {
      */
     calc_pwr_cc_impl::~calc_pwr_cc_impl()
     {
+      volk_free(d_eg_buf);
     }
-
+    /*
     void calc_pwr_cc_impl::set_calc_len(int aclen)
     {
       if(aclen<0){
@@ -67,15 +75,14 @@ namespace gr {
       }
       d_acc_len = aclen;
       d_acc_cnt=0;
-      d_state = false;
-      d_acc_eng = 0;
+      d_acc_eng = gr_complex(0,0);
       d_do_report = false;
     }
     int calc_pwr_cc_impl::calc_len() const
     {
       return d_acc_len;
     }
-
+    */
     bool calc_pwr_cc_impl::start()
     {
       d_finished = false;
@@ -94,13 +101,16 @@ namespace gr {
     void calc_pwr_cc_impl::run()
     {
       while(true){
-        boost::this_thread::sleep(boost::posix_time::milliseconds(d_update_period));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(d_period));
         if(!d_finished){
           return;
         }
         if(d_do_report){
           d_do_report = false;
-          std::cout<<"<Calc Power>output calculated pwr db"<<d_pwr_db<<std::endl;
+          //dout<<"<Calc Power>output calculated pwr db"<<d_pwr_db<<std::endl;
+          d_pwr_db = std::log(real(d_acc_eng)/(float)d_acc_cnt);
+          d_acc_cnt=0;
+          d_acc_eng = gr_complex(0,0);
           message_port_pub(d_out_port,pmt::cons(pmt::PMT_NIL, pmt::from_float(d_pwr_db)));
         }
       }
@@ -113,35 +123,12 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
-
-      std::vector<tag_t> tags;
-      get_tags_in_window(tags,0,0,noutput_items,d_target_tag);
+      volk_32fc_x2_conjugate_dot_prod_32fc(d_eg_buf,in,in,noutput_items);
       int count =0;
       while(count<noutput_items){
-        if(!tags.empty()){
-          int offset = tags[0].offset - nitems_read(0);
-          if(offset == count){
-            if(!d_state){
-              d_state = true;
-              d_acc_eng=0;
-              d_acc_cnt =0;
-            }
-            tags.erase(tags.begin());
-          }
-        }
-        d_acc_eng += (d_state)?  std::norm(in[count]) : 0;
-        d_acc_cnt = (d_state)? d_acc_cnt+1 : 0;
-        if(d_acc_cnt == d_acc_len){
-          float temp_eng = (float)d_acc_eng/(double)d_acc_len;
-          if(temp_eng>0){
-            d_pwr_db = 10.0 * std::log10(temp_eng);
-            d_do_report = true;
-          }
-          d_acc_cnt =0;
-          d_acc_cnt=0;
-          d_state = false;
-        }
-        count++;
+        d_acc_eng += d_eg_buf[count++];
+        //d_acc_eng += std::norm(in[count]);
+        d_acc_cnt++;
       }
       std::memcpy(out,in,sizeof(gr_complex)*noutput_items);
       return noutput_items;

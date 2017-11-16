@@ -46,10 +46,10 @@ namespace gr {
        * class. pwr::calc_pwr_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int aclen, const std::string& tagname);
+      static sptr make(float period);
 
-      virtual void set_calc_len(int aclen)=0;
-      virtual int calc_len()const =0;
+      //virtual void set_calc_len(int aclen)=0;
+      //virtual int calc_len()const =0;
     };
 
   } // namespace pwr

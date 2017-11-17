@@ -30,7 +30,7 @@
 
 namespace gr {
   namespace pwr {
-    #define d_debug true
+    #define d_debug false
     #define dout d_debug && std::cout
     calc_pwr_cc::sptr
     calc_pwr_cc::make(float period)
@@ -50,7 +50,6 @@ namespace gr {
               d_cap(8192*32)
     {
       message_port_register_out(d_out_port);
-      //set_calc_len(aclen);
       if(period<0){
         throw std::invalid_argument("Period (ms) should be positive number");
       }
@@ -67,22 +66,7 @@ namespace gr {
     {
       volk_free(d_eg_buf);
     }
-    /*
-    void calc_pwr_cc_impl::set_calc_len(int aclen)
-    {
-      if(aclen<0){
-        throw std::invalid_argument("Accumulation length should be positive, please reset...");
-      }
-      d_acc_len = aclen;
-      d_acc_cnt=0;
-      d_acc_eng = gr_complex(0,0);
-      d_do_report = false;
-    }
-    int calc_pwr_cc_impl::calc_len() const
-    {
-      return d_acc_len;
-    }
-    */
+    
     bool calc_pwr_cc_impl::start()
     {
       d_finished = false;
@@ -93,7 +77,7 @@ namespace gr {
     }
     bool calc_pwr_cc_impl::stop()
     {
-      d_finished = false;
+      d_finished = true;
       d_thread->interrupt();
       d_thread->join();
       return block::stop();
@@ -102,17 +86,13 @@ namespace gr {
     {
       while(true){
         boost::this_thread::sleep(boost::posix_time::milliseconds(d_period));
-        if(!d_finished){
+        if(d_finished){
           return;
         }
-        if(d_do_report){
-          d_do_report = false;
-          //dout<<"<Calc Power>output calculated pwr db"<<d_pwr_db<<std::endl;
-          d_pwr_db = std::log(real(d_acc_eng)/(float)d_acc_cnt);
-          d_acc_cnt=0;
-          d_acc_eng = gr_complex(0,0);
-          message_port_pub(d_out_port,pmt::cons(pmt::PMT_NIL, pmt::from_float(d_pwr_db)));
-        }
+        d_pwr_db = 10.0*std::log10(real(d_acc_eng)/(float)d_acc_cnt);
+        d_acc_cnt=0;
+        d_acc_eng = gr_complex(0,0);
+        message_port_pub(d_out_port,pmt::cons(pmt::PMT_NIL, pmt::from_float(d_pwr_db)));
       }
     }
 
@@ -123,11 +103,10 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
-      volk_32fc_x2_conjugate_dot_prod_32fc(d_eg_buf,in,in,noutput_items);
+      volk_32fc_x2_multiply_conjugate_32fc(d_eg_buf,in,in,noutput_items);
       int count =0;
       while(count<noutput_items){
         d_acc_eng += d_eg_buf[count++];
-        //d_acc_eng += std::norm(in[count]);
         d_acc_cnt++;
       }
       std::memcpy(out,in,sizeof(gr_complex)*noutput_items);

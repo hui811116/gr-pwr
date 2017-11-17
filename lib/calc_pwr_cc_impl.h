@@ -30,10 +30,7 @@ namespace gr {
     {
      private:
       gr_complex d_acc_eng;
-      //int d_acc_len;
       int d_acc_cnt;
-      //bool d_state;
-      bool d_do_report;
       bool d_finished;
       float d_pwr_db;
       float d_period;
@@ -42,7 +39,6 @@ namespace gr {
 
       gr::thread::mutex d_mutex;
       const pmt::pmt_t d_out_port;
-      const pmt::pmt_t d_target_tag;
       boost::shared_ptr<gr::thread::thread> d_thread;
       boost::posix_time::ptime d_system_time;
 
